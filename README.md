@@ -85,9 +85,11 @@ Since VAD (Voice Activity Detection) is faster than STT (Speech-to-Text), the ha
 
 ### Console Mode (for testing)
 
+To run an agent that uses the interruption handler in console mode, invoke your agent script with the `console` argument:
+
 ```bash
 source venv312/bin/activate
-python3 test_interruption_demo.py console
+python3 <your_agent_script>.py console
 ```
 
 ### Configuration
