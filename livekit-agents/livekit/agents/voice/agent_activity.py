@@ -1642,8 +1642,10 @@ class AgentActivity(RecognitionHooks):
                 )
                 # Clear the audio transcript to prevent it from being processed
                 if self._audio_recognition is not None:
-                    # Reset the audio transcript buffer to prevent it from being added to chat context
-                    self._audio_recognition._audio_transcript = ""
+                    # Use a public API on AudioRecognition if available to reset the transcript
+                    reset_transcript = getattr(self._audio_recognition, "reset_transcript", None)
+                    if callable(reset_transcript):
+                        reset_transcript()
                 return  # Skip processing this turn entirely - DO NOT interrupt the agent
         
         if self._current_speech is not None:
