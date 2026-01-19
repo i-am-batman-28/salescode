@@ -1196,11 +1196,10 @@ class AgentSession(rtc.EventEmitter[EventTypes], Generic[Userdata_T]):
 
         old_state = self._agent_state
         self._agent_state = state
-        
-        # Update interruption handler with agent speaking state
-        if self._activity is not None and self._activity._interruption_handler is not None:
-            self._activity._interruption_handler.set_agent_speaking(state == "speaking")
-        
+
+        # Update interruption handler with agent speaking state via AgentActivity API
+        if self._activity is not None:
+            self._activity.set_agent_speaking(state == "speaking")
         self.emit(
             "agent_state_changed",
             AgentStateChangedEvent(old_state=old_state, new_state=state),
