@@ -349,8 +349,13 @@ class InterruptionHandler:
                     )
                 if transcript:
                     return not self.should_ignore_interruption(transcript, session_id)
-            except (asyncio.TimeoutError, Exception):
+            except asyncio.TimeoutError:
+                # Best-effort fast path for transcript; on timeout we fall back to normal polling.
                 pass
+            except Exception:
+                # Unexpected errors in transcript_getter should not break interruption handling;
+                # log at debug level and continue with the standard polling-based behavior.
+                logger.debug("transcript_getter failed during fast-path STT validation", exc_info=True)
 
         # Wait for transcript with remaining timeout
         elapsed = time.time() - start_time
