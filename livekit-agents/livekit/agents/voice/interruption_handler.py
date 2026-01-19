@@ -191,15 +191,17 @@ class InterruptionHandler:
                 
                 # For longer speech without transcript when agent is speaking, still be cautious
                 # But allow it (could be "stop", "wait", "no")
+                duration_str = f"{speech_duration:.2f}s" if speech_duration is not None else "unknown"
                 logger.debug(
-                    f"Agent is speaking, no transcript available, speech duration: {speech_duration:.2f}s - "
+                    f"Agent is speaking, no transcript available, speech duration: {duration_str} - "
                     f"allowing interruption (could be a command)"
                 )
             else:
                 # When agent is NOT speaking, allow all interruptions (normal conversation)
+                duration_str = f"{speech_duration:.2f}s" if speech_duration is not None else "unknown"
                 logger.debug(
                     f"Agent not speaking, no transcript available - allowing interruption "
-                    f"(speech_duration: {speech_duration:.2f}s if available)"
+                    f"(speech_duration: {duration_str} if available)"
                 )
             return False  # Allow interruption if we can't determine what was said
 
